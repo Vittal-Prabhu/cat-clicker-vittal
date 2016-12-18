@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cat Clicker</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="container">
+
+    </div>
+</body>
+<script type="text/javascript">
+    var cats = [
+    {
+        "catName" : "AB",
+        "image" : "https://placekitten.com/g/150/200",
+        "id": "catAB",
+        "did": "catA",
+        "clicks" : 0
+    },
+    {
+        "catName" : "BC",
+        "image" : "https://placekitten.com/g/160/200",
+        "id": "catBC",
+        "did": "catB",
+        "clicks" : 0
+    },
+    {
+        "catName" : "CD",
+        "image" : "https://placekitten.com/g/170/200",
+        "id": "catCD",
+        "did": "catC",
+        "clicks" : 0
+    },
+    {
+        "catName" : "DE",
+        "image" : "https://placekitten.com/g/180/200",
+        "id": "catDE",
+        "did": "catD",
+        "clicks" : 0
+    },
+    {
+        "catName" : "EF",
+        "image" : "https://placekitten.com/g/190/200",
+        "id": "catEF",
+        "did": "catE",
+        "clicks" : 0
+    }];
+
+cats.display = function(cat){
+    var name = '<div><span>Cat Name:</span><span id="cat1">'+ cat.catName +'</span></div>';
+    var pic = '<img id="'+cat.id+'" src="'+cat.image+'">';
+    var noOfClicks = '<div><span>No of clicks:</span><span id="'+cat.did+'">'+0+'</span></div>';
+    $("#container").append(name+pic+noOfClicks);
+    var element = document.getElementById(cat.id);
+    element.addEventListener('click',function(e){
+        cat.clicks++;
+        var eleme = document.getElementById(cat.did);
+        eleme.innerHTML = cat.clicks;
+    });
+};
+
+    for(var i=0;i<cats.length;i++){
+        var cat = cats[i];
+        var elem = document.createElement('div');
+        elem.textContent = cat.catName;
+        elem.addEventListener('click',(function(catCopy){
+            return function(){
+                cats.display(catCopy);
+            };
+            })(cat));
+        document.body.appendChild(elem);
+        }
+</script>
+    <!-- <div>
+    <div>
+    <span>Cat Name:</span>
+    <span id="cat1">_name_</span>
+    </div>
+    <img class="catimage" src="https://placekitten.com/g/200/200" alt="Cat-Image">
+    </div>
+    <div>
+    <div>
+    <span>Cat Name:</span>
+    <span id="cat2">_name_</span>
+    </div>
+    <img class="catimage" src="https://placekitten.com/g/150/200" alt="Cat-Image">
+    </div>
+    <span>No of clicks:</span>
+    <span id="clicks">0</span>
+</body>
+<script type="text/javascript">
+    var i=0;
+    $(".catimage").click(function(e) {
+        i++;
+        $("#clicks").html(i);
+    });
+    $("#cat1").html("TOM");
+    $("#cat2").html("SOM");
+</script> -->
+</html>
