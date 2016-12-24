@@ -6,8 +6,13 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 </head>
 <body>
-    <div id="container">
-
+    <div id="catNameDisp">
+    </div>
+    <div id="catDisp">
+    </div>
+    <div id="adminbuttons">
+    <div id="adminArea">
+    </div>
     </div>
 </body>
 <script type="text/javascript">
@@ -16,61 +21,116 @@
         "catName" : "AB",
         "image" : "https://placekitten.com/g/150/200",
         "id": "catAB",
-        "did": "catA",
+        "did": 1,
         "clicks" : 0
     },
     {
         "catName" : "BC",
         "image" : "https://placekitten.com/g/160/200",
         "id": "catBC",
-        "did": "catB",
+        "did": 2,
         "clicks" : 0
     },
     {
         "catName" : "CD",
         "image" : "https://placekitten.com/g/170/200",
         "id": "catCD",
-        "did": "catC",
+        "did": 3,
         "clicks" : 0
     },
     {
         "catName" : "DE",
         "image" : "https://placekitten.com/g/180/200",
         "id": "catDE",
-        "did": "catD",
+        "did": 4,
         "clicks" : 0
     },
     {
         "catName" : "EF",
         "image" : "https://placekitten.com/g/190/200",
         "id": "catEF",
-        "did": "catE",
+        "did": 5,
         "clicks" : 0
     }];
 
-cats.display = function(cat){
-    var name = '<div><span>Cat Name:</span><span id="cat1">'+ cat.catName +'</span></div>';
+var adminReady=0;
+
+function displayCatName(){
+    var catList ='<div id="cat-list"></div>';
+    $("#catNameDisp").append(catList);
+    var addButton = '<button id="button1">cat 1</button>'+' '+'<button id="button2">cat 2</button>'+' '+'<button id="button3">cat 3</button>'+' '+'<button id="button4">cat 4</button>'+' '+'<button id="button5">cat 5</button><br>';
+    $("#cat-list").append(addButton);
+    var adminButton = '<br><button id="button6">Admin</button>';
+    $("#adminbuttons").append(adminButton);
+
+}
+
+displayCatName();
+
+function displayCat(cat){
+    adminReady = cat.did;
+    var name = '<div id="cat-display"><div><span>Cat Name:</span><span id="cat1">'+ cat.catName +'</span></div>';
     var pic = '<img id="'+cat.id+'" src="'+cat.image+'">';
-    var noOfClicks = '<div><span>No of clicks:</span><span id="'+cat.did+'">'+0+'</span></div>';
-    $("#container").append(name+pic+noOfClicks);
+    var noOfClicks = '<div><span>No of clicks:</span><span id="'+cat.did+'">'+0+'</span></div></div>';
+    $("#catDisp").html(name+pic+noOfClicks);
     var element = document.getElementById(cat.id);
     element.addEventListener('click',function(e){
         cat.clicks++;
         var eleme = document.getElementById(cat.did);
         eleme.innerHTML = cat.clicks;
     });
+    if(adminReady>0){
+        hideAdminArea();
+    }
+}
+
+function displayAdmin(){
+    if(adminReady > 0){
+    var name = '<form id="form-container" class="form-container"><label for="catName">Cat Name: </label><input type="text" id="catName" value="'+cats[adminReady-1].catName+'"><br><label for="imageUrl">Image Url: </label><input type="text" id="imageUrl" value="'+cats[adminReady-1].image+'"><br><button type="button" id="submit-btn">Save</button></form>';
+    $("#adminArea").html(name);
+    $("#submit-btn").click(function(){
+        saveNewCat(cats[adminReady-1]);
+    })
+}else{
+    var name = '<br><span>Load the photo first</span><br>';
+    $("#adminArea").html(name);
+}
+}
+
+
+function hideAdminArea(){
+    $("#form-container").hide();
+}
+function showAdminArea(){
+    $("#form-container").show();
+}
+
+function saveNewCat(cat){
+    var newName = $("#catName").val();
+    var newUrl = $("#imageUrl").val();
+
+    cat.catName = newName;
+    cat.image = newUrl;
+    console.log(newName+' '+newUrl);
+    displayCat(cat);
 };
 
-    for(var i=0;i<cats.length;i++){
-        var cat = cats[i];
-        var elem = document.createElement('div');
-        elem.textContent = cat.catName;
-        elem.addEventListener('click',(function(catCopy){
-            return function(){
-                cats.display(catCopy);
-            };
-            })(cat));
-        document.body.appendChild(elem);
-        }
+var buttons = $("button");
+
+function bindButtonToCat(idNumber){
+    if(idNumber<6){
+    $("#button"+idNumber).click(function(){
+        displayCat(cats[idNumber-1]);
+    })
+    }else if (idNumber===6){
+    $("#button"+idNumber).click(function(){
+        displayAdmin();
+    })
+    }
+}
+for (var i=1; i<=buttons.length; i++){
+    bindButtonToCat(i);
+}
 </script>
 </html>
+
